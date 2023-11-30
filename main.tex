@@ -31,6 +31,8 @@
 \usepackage{pgfplots} % Used for plotting functions
 \usepackage{wallpaper} % For adding wallpapers
 \usepackage{listings} % Required for insertion of code
+\usepackage{eso-pic} % Required for placing background pictures
+\usepackage{ifthen} % Required for conditional statements
 
 % Define the Haskell language style for listings
 \lstdefinelanguage{Haskell}{
@@ -93,7 +95,17 @@
 
 	\ThisCenterWallPaper{.4}{Images/IUS Logo.png}
 
-	\pagebreak
+	\newpage % Start new page after the first page
+    \AddToShipoutPictureBG{%
+        \ifthenelse{\value{page}=1}{}{%
+            \begin{tikzpicture}[remember picture,overlay]
+                \node [opacity=0.3, at=(current page.center)] {
+                    \includegraphics[width=0.5\paperwidth]{Haskell-Logo}
+                };
+            \end{tikzpicture}
+        }
+    }
+
 	\tableofcontents
 	\pagebreak
 
