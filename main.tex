@@ -310,8 +310,138 @@ squares = [x * x | x <- [1..10]] -- List of squares from 1 to 10
         This list comprehension takes numbers 1 through 10 and returns a new list of their squares. Operations like these demonstrate the power and flexibility of Haskell's list handling capabilities.
 
 
+        \subsection{Tuples}
 
-        \subsection{Higher-Order Functions}
+            In Haskell, a tuple is a collection of finite, ordered elements that can be of different types. Tuples are particularly useful for grouping together a fixed number of items because they can hold multiple values together as a single unit.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- A pair (2-tuple) consisting of a String and an Int
+personInfo :: (String, Int)
+personInfo = ("Alice", 42)
+
+-- A triple (3-tuple) with different types
+mixedTuple :: (String, Int, Bool)
+mixedTuple = ("Bob", 28, True)
+
+-- The empty tuple (0-tuple), which can be useful as a placeholder
+emptyTuple :: ()
+emptyTuple = ()
+            \end{lstlisting}
+
+            Each value in a tuple can be accessed through pattern matching, which allows for concise and expressive unpacking of the tuple's elements.
+
+            \begin{lstlisting}
+-- Pattern matching to extract values from a tuple
+(name, age) = personInfo
+            \end{lstlisting}
+
+            This pattern matching expression binds `name` to `"Alice"` and `age` to `42`, extracting the elements of the `personInfo` tuple. Unlike lists, tuples are heterogenous, meaning each element can be of a different type, and their size is fixed upon creation. They are commonly used to return multiple values from a function and are an essential data structure in Haskell's type system.
+
+
+        \subsection{Standard Prelude}
+
+            The Haskell standard library, or standard prelude, includes a collection of built-in functions that are automatically imported into every Haskell program. These functions encompass a wide array of operations, including but not limited to, those that manipulate lists.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- Selecting the first element of a non-empty list will return the element,
+-- but using 'head' on an empty list will result in a runtime error.
+res1 = head [1, 2, 3, 4, 5] -- 1
+
+-- Similarly, 'tail' will fail on an empty list.
+res2 = tail [1, 2, 3, 4, 5] -- [2, 3, 4, 5]
+
+-- Indexing is zero-based, which means '!! 2' returns the third element.
+res3 = [1, 2, 3, 4, 5] !! 2 -- 3
+
+-- The 'take' function is efficient, but 'drop' might require traversing the list.
+res4 = take 3 [1, 2, 3, 4, 5] -- [1, 2, 3]
+res5 = drop 4 [1, 2, 3, 4, 5] -- [5]
+
+-- 'length' and 'reverse' require traversing the entire list, leading to linear time complexity.
+res6 = length [1, 2, 3, 4, 5] -- 5
+res11 = reverse [1, 2, 3, 4, 5] -- [5, 4, 3, 2, 1]
+
+-- List concatenation with '++' and constructing lists with ':' are commonly used operations.
+res9 = [1, 2] ++ [3] ++ [4, 5] -- [1,2,3,4,5]
+res10 = 0 : [1, 2, 3, 4, 5] -- [0, 1, 2, 3, 4, 5]
+
+-- Reductions like 'sum' and 'product' can be implemented using 'foldl' or 'foldr'.
+res7 = sum [1, 2, 3, 4, 5] -- 15
+res8 = product [1, 2, 3, 4, 5] -- 120
+res12 = foldl (+) 0 [1, 2, 3, 4, 5] -- Also 15
+            \end{lstlisting}
+
+            These examples illustrate the versatility of list processing in Haskell. The language's rich set of list operations enables programmers to write concise, clear, and expressive code.
+
+
+
+    \subsection{Functions}
+
+        In Haskell, a function is a mapping from arguments of one type to results of another type. The notation \texttt{T1 -> T2} denotes functions that map arguments of type \texttt{T1} to results of type \texttt{T2}.
+
+        \lstset{language=Haskell}
+        \begin{lstlisting}
+-- A function to calculate the sum of two integers
+-- (parameter, parameter) -> return
+add :: (Int, Int) -> Int -- Function type declaration is optional
+add (x, y) = x + y       -- Function definition is required
+
+res1 = add (3, 2)        -- Evaluates to 5
+
+-- Another way to define a function is by using currying,
+-- where each argument is passed separately.
+-- parameter -> parameter -> return
+add2 :: Int -> Int -> Int -- Type declaration is optional
+add2 x y = x + y
+
+res2 = add2 3 2           -- Also evaluates to 5
+        \end{lstlisting}
+
+        The function \texttt{add} takes a single parameter: a tuple of two integers. In contrast, \texttt{add2} showcases currying, where a function takes its arguments one at a time. Currying enables partial application, where a function can be applied to some of its arguments to produce another function. For example:
+
+        \begin{lstlisting}
+addThree :: Int -> Int
+addThree = add2 3
+
+res3 = addThree 2         -- Evaluates to 5
+        \end{lstlisting}
+
+        The partially applied function \texttt{addThree} is created by supplying only the first argument to \texttt{add2}. This new function can then be used to add three to another number, demonstrating Haskell's elegant approach to function composition and application.
+
+
+        \subsection{Function Composition}
+            Function composition in Haskell is a way to combine two or more functions into a single function. The composition operator \texttt{(.)} is used to achieve this, where \texttt{(f . g)} is equivalent to \texttt{(\\x -> f (g x))} in Haskell. This means that the result of applying function \texttt{g} to some input \texttt{x} is then passed as the argument to function \texttt{f}.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- Type declaration of the composition operator
+(.) :: (b -> c) -> (a -> b) -> a -> c
+
+-- Example of composing two functions
+(f . g) -- This is equivalent to the lambda expression below
+(\x -> f (g x))
+            \end{lstlisting}
+
+            Function composition is a powerful concept in functional programming because it allows for the creation of complex operations by combining simpler ones. The composition operator is central to this idea, enabling concise and expressive function chaining.
+
+
+        \subsection{Anonymous Functions}
+
+            Anonymous functions, or lambda functions, are functions that are not bound to an identifier. In Haskell, anonymous functions are defined using a backslash (\textbackslash) followed by a list of parameters, an arrow (\texttt{->}), and then the function body. They are useful for creating quick, one-off functions without the need to give them a name.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- An example of an anonymous function that adds two numbers
+(\x y -> x + y)
+
+-- Using an anonymous function with the map function
+map (\x -> x * 2) [1, 2, 3, 4, 5] -- [2, 4, 6, 8, 10]
+            \end{lstlisting}
+
+            Anonymous functions are often used in higher-order functions, like \texttt{map}, \texttt{filter}, and \texttt{foldr}, where you need to pass a function as an argument. Since Haskell supports first-class functions, you can use anonymous functions wherever a function is expected.
+     \subsection{Higher-Order Functions}
             In Haskell, it is possible to define functions that accept other functions as arguments, which classifies them as higher-order functions. A classic example of this is the \texttt{map} function, which applies a given function to each item in a list.
             Here's a simple example:
 
@@ -326,6 +456,105 @@ res = map squareNum nums -- [1, 4, 9, 16, 25]
             \end{lstlisting}
 
             The function \texttt{squareNum} squares an integer. The list \texttt{nums} contains several integers. The \texttt{map} function is then used to apply \texttt{squareNum} to every element in \texttt{nums}, resulting in a new list \texttt{res} with each number squared.
+
+
+        \subsection{Conditional Expressions}
+            Haskell enables the use of conditional expressions for selecting between different results based on a given condition. The most fundamental form is the `if-then-else` expression, which must always end with an `else` branch to ensure that the expression is well-defined in all cases.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- A function to calculate the absolute value of an integer
+getAbs :: Int -> Int
+getAbs x = if (x < 0) then -x else x
+
+-- Example usage of getAbs
+res1 = getAbs (-5) -- 5
+res2 = getAbs 20   -- 20
+
+-- Conditional expressions can be nested to handle multiple conditions
+getSomething :: Int -> String
+getSomething x = if (x < 0) then "Num is less than zero"
+             else if (x > 0) then "Num is greater than zero"
+             else "Num is zero"
+
+-- Example usage of getSomething
+res1 = getSomething (-5) -- "Num is less than zero"
+res2 = getSomething 20   -- "Num is greater than zero"
+res3 = getSomething 0    -- "Num is zero"
+            \end{lstlisting}
+
+            In Haskell, every `if` must be accompanied by a corresponding `else`, making every conditional expression guaranteed to return a result. This is in contrast to some other languages where `if` statements can be used without `else`, potentially leading to undefined behavior.
+
+
+        \subsection{Guarded Equations (Guards)}
+            Guarded equations, often referred to as guards, offer a syntactically convenient way to express branching in Haskell functions. They allow you to choose between different results based on boolean conditions, providing an alternative to nested `if-then-else` statements.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- A function that uses guards to return different strings based on the input value
+guardsExample :: Int -> String
+guardsExample x
+| x < 0     = "Num is less than zero"
+| x > 0     = "Num is greater than zero"
+| otherwise = "Num is zero"
+
+-- Example usage of guardsExample
+res = guardsExample 10 -- "Num is greater than zero"
+            \end{lstlisting}
+
+            Guards are evaluated in order, from top to bottom. The first true guard's corresponding expression is the result of the function. The keyword `otherwise` is a synonym for `True` and ensures that there is a default result if no other guards are satisfied.
+
+
+        \subsection{Pattern Matching}
+            Pattern matching is a powerful feature in Haskell that allows for a clear and concise way to deconstruct data structures and bind variables to values. Functions can be defined using a series of patterns, which are checked in order to determine which code should be executed.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- Defining a factorial function using pattern matching
+factorial :: Integer -> Integer
+factorial 0 = 1  -- Base case for 0
+factorial 1 = 1  -- Base case for 1
+factorial n = n * factorial (n - 1)  -- Recursive case
+
+-- Evaluating the factorial function with different inputs
+res1 = factorial 0  -- Evaluates to 1, using the first pattern
+res2 = factorial 1  -- Also evaluates to 1, using the second pattern
+res3 = factorial 5  -- Evaluates to 120, using the recursive pattern
+            \end{lstlisting}
+
+            In the example above, the `factorial` function is defined using pattern matching to handle different cases: when the input is `0`, when it is `1`, and the general case where the function calls itself recursively. The Haskell compiler checks these patterns from top to bottom and applies the first matching pattern to compute the result.
+
+
+        \subsection{List Comprehensions}
+
+            List comprehensions in Haskell provide a succinct and declarative way to create lists by specifying patterns and applying filters. They are akin to set comprehensions in mathematics and allow for efficient list construction and manipulation.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- List comprehension to generate the squares of numbers from 1 to 10
+squares = [x^2 | x <- [1..10]]
+-- Result: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+-- A generator is used to draw elements from a list, and can be combined with a filter
+evenSquares = [x^2 | x <- [1..10], even x]
+-- Result: [4, 16, 36, 64, 100], only squares of even numbers
+            \end{lstlisting}
+
+            In the `squares` list comprehension, the expression $x^2$ defines the elements of the new list, and `x <- [1..10]` is a generator that feeds values from 1 to 10 into `x`. The second example, `evenSquares`, incorporates a filter, `even x`, to include only the squares of even numbers.
+
+            List comprehensions can also be nested or combined with multiple generators to produce more complex lists:
+
+            \begin{lstlisting}
+-- Nested list comprehension to flatten a list of lists
+flatten xss = [x | xs <- xss, x <- xs]
+-- Given xss as a list of lists, this will produce a single flattened list
+
+-- Combining multiple generators to create a Cartesian product
+pairs = [(x, y) | x <- [1..5], y <- [10, 20]]
+-- Result: [(1,10), (1,20), ..., (5,10), (5,20)]
+            \end{lstlisting}
+
+            By providing a clear structure for generating and filtering data, list comprehensions in Haskell offer a more readable alternative to nested loops and are a powerful tool for list processing.
 	\section{Comparison with Other Languages}
 	\section{Simple Code Examples}
 	\section{Conclusion}
