@@ -30,6 +30,25 @@
 \usepackage{bm} % Adding bold text to math inputs
 \usepackage{pgfplots} % Used for plotting functions
 \usepackage{wallpaper} % For adding wallpapers
+\usepackage{listings} % Required for insertion of code
+
+% Define the Haskell language style for listings
+\lstdefinelanguage{Haskell}{
+    morekeywords={class, data, deriving, do, else, if, import, in, infixl, infixr, instance, let, module, newtype, of, then, type, where, _, ::, =, \, |, <-, ->, @, ~, =>},
+    sensitive=true,
+    morecomment=[l]{--},
+    morecomment=[s]{\{-}{-\}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    identifierstyle=\color{blue},
+    keywordstyle=\color{green},
+    commentstyle=\color{gray},
+    basicstyle=\ttfamily, % Use monospaced font for code
+    showstringspaces=false, % Don't show spaces in strings as special underscores
+    numbers=left, % Line numbers on the left
+    numberstyle=\tiny\color{gray}, % Line numbers are grey and small
+    stepnumber=1 % Line numbers go in steps of 1
+}
 
 % Setting up the default image path
 \graphicspath{{./Images/}}
@@ -63,6 +82,7 @@
 
 \begin{document}
 	\maketitle
+    \lstset{language=Haskell}
 	\vspace{5mm}
 	
 	\begin{abstract}
@@ -139,7 +159,161 @@
             Haskell is equipped with a comprehensive standard library, covering a broad spectrum of functionalities, from basic data manipulation to sophisticated algorithms.
 
         \pagebreak
+
 	\section{Structures of the Language}
+        Haskell's design and architecture are characterized by several key structural elements, which make it unique and powerful among programming languages.
+
+        \subsection{Syntax and Notation}
+            Haskell features a clean and concise syntax that emphasizes readability and maintainability. It uses significant whitespace and layout rules, similar to Python, to define code structure, reducing the reliance on braces and semicolons.
+            \textbf{Key Aspects of Haskell's Syntax:}
+            \begin{itemize}
+                \item \textit{Function Definition and Application:} Functions are defined using a straightforward syntax, where the function name is followed by its parameters, and the body of the function follows an equals sign. Function application is equally straightforward, requiring only the function name followed by its arguments, without parentheses or commas.
+                \item \textit{Indentation-Sensitive:} Haskell's layout rule dictates that code grouped together (like the body of a function or a control structure) must be indented under the same column. This leads to a visually structured and clean code layout.
+                \item \textit{Infix and Prefix Notation:} Haskell allows both infix and prefix notation for functions, enhancing flexibility and readability in different contexts. For example, operators like `+` are used infix, while most other functions are used in prefix form.
+            \end{itemize}
+
+            \textbf{Example of Haskell Syntax:}
+            Consider a simple function definition in Haskell:
+
+            \begin{lstlisting}
+addNumbers :: Int -> Int -> Int
+addNumbers x y = x + y
+            \end{lstlisting}
+
+            This function `addNumbers` takes two integers (`Int`) as inputs and returns their sum. The type declaration (`::`) is optional but helps in understanding the function's contract. Notice the absence of curly braces and semicolons, and how the function's body is simply defined after the equals sign.
+
+            Haskell's syntax, while different from many mainstream languages, offers a level of expressiveness and clarity that is appreciated in complex software development.
+
+        \subsection{Basic Types}
+
+            Haskell's standard library includes several built-in basic types that are fundamental to the language. The most commonly used are:
+
+            \begin{itemize}
+                \item \texttt{Bool} for boolean values.
+                \item \texttt{Char} for single Unicode characters.
+                \item \texttt{String}, which is syntactically equivalent to a list of characters (\texttt{[Char]}).
+                \item \texttt{Int} for fixed-precision integers, typically 64 bits in size on modern systems.
+                \item \texttt{Integer} for arbitrary-precision integers, limited only by available memory.
+                \item \texttt{Float} for single-precision floating-point numbers.
+                \item \texttt{Double} for double-precision floating-point numbers.
+            \end{itemize}
+
+            It's worth noting that numeric literals in Haskell are polymorphic. They can represent any numeric type based on the context in which they are used.
+
+            Here are some illustrative examples:
+
+            \begin{lstlisting}
+x :: Int
+x = 42  -- Represents a fixed-size integer
+
+y :: Double
+y = 3.14  -- Represents a double-precision floating-point number
+
+isTrue :: Bool
+isTrue = true  -- Represents a boolean value
+
+charExample :: Char
+charExample = 'A'  -- Represents a single character
+
+bigInt :: Integer
+bigInt = 123456789012345678901234567890  -- Represents an arbitrary-size integer
+
+someString :: String
+someString = "This is a string"  -- Represents a string, equivalent to a list of characters
+            \end{lstlisting}
+
+
+        \subsection{Explicit and Implicit Declaration (Type Inferencing)}
+            Haskell allows for both explicit and implicit type declarations. Explicit declaration is specifying the type of a variable or function using the double colon operator \texttt{::}, while implicit declaration leverages the compiler's type inference system.
+
+            \begin{lstlisting}
+myVar :: String
+myVar = "CS305"
+            \end{lstlisting}
+
+            Implicit type declaration does not require specifying types, as the compiler deduces the type from the values used.
+
+            \begin{lstlisting}
+myVar = "CS305"  -- The compiler infers myVar as a String
+            \end{lstlisting}
+
+        \subsection{Comments}
+            Comments are integral to writing clear and maintainable code. In Haskell, as in many programming languages, comments come in two forms: single-line and multi-line. Single-line comments are denoted by \texttt{--} and extend to the end of the line. Multi-line comments are enclosed within \texttt{\{-} and \texttt{-\}}, and uniquely, they can be nested within one another, which is a feature not commonly found in all programming languages.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+-- This is a single-line comment
+
+{-
+This
+is
+a
+multi-line
+comment
+which can be {- nested -} within another comment
+-}
+            \end{lstlisting}
+
+            These commenting conventions facilitate the documentation of code and the temporary disabling of code blocks during debugging and development.
+
+        \subsection{Immutability}
+
+            Immutability is a cornerstone of Haskell's design, mandating that variables, once assigned, cannot be altered. This principle underpins the functional programming paradigm, where data stability and predictability are paramount.
+
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+someVar :: String
+someVar = "Modify me"
+
+-- Reassignment is not allowed and results in a compile-time error:
+-- someVar = "modified"  -- This causes a multiple declaration error
+            \end{lstlisting}
+
+            Attempting to reassign `someVar` to a new value here would result in a compile-time error, specifically a "multiple declaration error," indicating that `someVar` has been assigned a value more than once.
+
+            This approach contrasts with mutable languages, where variables can change state throughout their lifecycle. While immutability can lead to a more functional and safer codebase, it may require programmers to think differently, particularly when it comes to managing state and side effects. Some of the benefits include easier reasoning about code behavior and enhanced thread safety. However, it may also introduce overhead due to the creation of new instances and could necessitate a deeper understanding of recursion and state management techniques within Haskell's functional context.
+
+
+    \subsection{Lists}
+        A list in Haskell is a collection of elements of the same type, enclosed in square brackets and separated by commas. Haskell lists are zero-indexed and can be manipulated using a variety of functions, such as \texttt{head} for the first element, \texttt{tail} for all but the first element, and \texttt{length} for the number of elements.
+
+        \lstset{language=Haskell}
+        \begin{lstlisting}
+nums :: [Int] -- This type declaration is optional
+nums = [1, 2, 3, 4, 5]
+        \end{lstlisting}
+
+        Haskell's lazy evaluation model allows for lists to be potentially infinite. This feature enables defining lists without predetermined bounds, such as the list of all positive integers:
+
+        \begin{lstlisting}
+positiveIntegers = [1..] -- An infinite list of positive integers
+        \end{lstlisting}
+
+        Lazy evaluation ensures that operations on such infinite lists are still manageable, as elements are only computed as needed. For instance, list comprehensions can be used to create lists from existing lists:
+
+        \begin{lstlisting}
+squares = [x * x | x <- [1..10]] -- List of squares from 1 to 10
+        \end{lstlisting}
+
+        This list comprehension takes numbers 1 through 10 and returns a new list of their squares. Operations like these demonstrate the power and flexibility of Haskell's list handling capabilities.
+
+
+
+        \subsection{Higher-Order Functions}
+            In Haskell, it is possible to define functions that accept other functions as arguments, which classifies them as higher-order functions. A classic example of this is the \texttt{map} function, which applies a given function to each item in a list.
+            Here's a simple example:
+
+            \begin{lstlisting}
+squareNum :: Int -> Int
+squareNum n = n * n
+
+nums :: [Int]
+nums = [1, 2, 3, 4, 5]
+
+res = map squareNum nums -- [1, 4, 9, 16, 25]
+            \end{lstlisting}
+
+            The function \texttt{squareNum} squares an integer. The list \texttt{nums} contains several integers. The \texttt{map} function is then used to apply \texttt{squareNum} to every element in \texttt{nums}, resulting in a new list \texttt{res} with each number squared.
 	\section{Comparison with Other Languages}
 	\section{Simple Code Examples}
 	\section{Conclusion}
