@@ -33,6 +33,7 @@
 \usepackage{listings} % Required for insertion of code
 \usepackage{eso-pic} % Required for placing background pictures
 \usepackage{ifthen} % Required for conditional statements
+\usepackage[backend=biber, style=alphabetic, citestyle=authoryear]{biblatex}
 
 % Define the Haskell language style for listings
 \lstdefinelanguage{Haskell}{
@@ -63,6 +64,9 @@
 
 % Setting up the default image path
 \graphicspath{{./Images/}}
+
+% Add the bib file with all references
+\addbibresource{./references.bib}
 
 % Implementing authro details
 \title{Introduction to Haskell Programming Language}
@@ -728,7 +732,32 @@ int factorial(int n) {
     \noindent In practical terms, the choice between using Haskell or C++ can be influenced by several factors, including the nature of the problem, performance requirements, and the need for side-effect management. Haskell shines in domains where rigorous type safety and functional abstractions can lead to more reliable and maintainable code. On the other hand, C++ offers greater control over system resources and performance, making it suitable for applications where these are critical considerations.
 
     \noindent As programming paradigms continue to evolve, the insights gained from both Haskell and C++ will undoubtedly contribute to more robust and versatile software development practices. The strengths of Haskell's functional programming can inform and improve the design of software systems, even as we leverage the power and control offered by imperative languages like C++.
-	\section{References}
+
+    \newpage
+    \nocite{*}
+    \printbibliography[heading=bibnumbered, title={References}]
+
+    \newpage
 	\section{Additional Resources}
+        During the course of this project, several resources provided invaluable information and insights that greatly enriched the understanding and application of Haskell and C++. While not directly cited in the document, the following resources are highly recommended for further exploration and deeper comprehension of the topics discussed:
+
+        \begin{itemize}
+            \item The official Haskell website (\url{https://www.haskell.org/}) for comprehensive documentation and community resources.
+            \item The C++ Resources Network (\url{https://cplusplus.com/}) for extensive tutorials and references on C++.
+            \item Online courses and tutorials on platforms like Coursera and Udemy, which offer interactive learning experiences in both Haskell and C++.
+            \item Various open-source projects and repositories on GitHub, which provide practical examples of Haskell and C++ in action.
+        \end{itemize}
+
+        \noindent These resources are ideal for both beginners and experienced programmers seeking to enhance their skills and understanding of functional and imperative programming paradigms.
+
 	\section{Acknowledgments}
+        I would like to extend my sincere gratitude to everyone who contributed to the successful completion of this project. Special thanks to:
+
+        \begin{itemize}
+            \item My peers and colleagues, for their support and constructive discussions that have greatly enriched my learning experience.
+            \item The authors and contributors of the referenced materials, whose work has been instrumental in shaping the understanding and insights presented in this document.
+            \item My family, my girlfriend, and friends, for their unwavering support and encouragement.
+        \end{itemize}
+
+        \noindent This project would not have been possible without the collective knowledge, support, and encouragement of all those mentioned above.
 \end{document}
