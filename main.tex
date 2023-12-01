@@ -613,7 +613,112 @@ safeDivide _ 0 = Left "Cannot divide by zero"
 safeDivide x y = Right (x `div` y)
         \end{lstlisting}
         \newpage
+
 	\section{Simple Code Examples}
+    
+        \subsection{Sum of elements}
+    
+        \begin{minipage}[t]{0.45\textwidth}
+            \raisebox{\depth}{\includegraphics[width=\linewidth]{Haskell-Logo-Code}}
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+-- or
+
+sum = foldr (+) 0
+            \end{lstlisting}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.45\textwidth}
+            \centering
+            \raisebox{-8mm}{\includegraphics[width=0.6\linewidth]{CPP-Logo-Code}}
+            \vspace*{3mm}
+            \lstset{language=C++}
+            \begin{lstlisting}
+int sum(int *arr, int length) {
+    int i, sum = 0;
+    for(i = 0; i < length; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+            \end{lstlisting}
+        \end{minipage}
+
+        \vspace*{5mm}
+        \noindent In the Haskell code, we define a function \textit{sum} using pattern matching. This function specifies that if it receives an empty list, the sum is 0. Otherwise, the list is divided into the first element \textit{x} and the rest of the list \textit{xs}. Recursion is then used to sum the remainder of the list until an empty list is encountered, at which point the recursion terminates.
+
+        \newpage
+        \subsection{Lazy Evaluation}
+
+        \begin{minipage}[t]{0.45\textwidth}
+            \raisebox{\depth}{\includegraphics[width=\linewidth]{Haskell-Logo-Code}}
+            \lstset{language=Haskell}
+            \begin{lstlisting}
+func arg =
+  let x = func1 arg
+      y = func2 arg
+      z = func3 arg
+  in if z then x else y
+            \end{lstlisting}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{0.45\textwidth}
+            \centering
+            \raisebox{-8mm}{\includegraphics[width=0.6\linewidth]{CPP-Logo-Code}}
+            \vspace*{3mm}
+            \lstset{language=C++}
+            \begin{lstlisting}
+int func(int arg) {
+    int x = func1(arg);
+    int y = func2(arg);
+    int z = func3(arg);
+    if(z) {
+        return x;
+    } else {
+        return y;
+    }
+}
+            \end{lstlisting}
+        \end{minipage}
+
+    \vspace*{3mm}
+    \noindent Let's assume \textit{func1}, \textit{func2}, and \textit{func3} each take 10 minutes to evaluate. In this C++ example, the code would approximately take 30 minutes to execute because C++ determines the values of \textit{func1}, \textit{func2}, and \textit{func3} sequentially. Conversely, Haskell employs lazy evaluation, only calculating these functions when necessary. In the given example, Haskell would first evaluate \textit{func3} (to determine \textit{z}), taking 10 minutes. Then, based on the value of \textit{z}, Haskell would evaluate either \textit{func1} or \textit{func2}—but not both. Thus, Haskell would require only 20 minutes in total to complete the execution.
+
+    \newpage
+    \subsection{Factorial}
+
+    \begin{minipage}[t]{0.45\textwidth}
+        \raisebox{\depth}{\includegraphics[width=\linewidth]{Haskell-Logo-Code}}
+        \lstset{language=Haskell}
+        \begin{lstlisting}
+factorial :: Integer -> Integer
+factorial n
+  | n <= 1    = 1
+  | otherwise = n * factorial (n - 1)
+        \end{lstlisting}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \raisebox{-8mm}{\includegraphics[width=0.6\linewidth]{CPP-Logo-Code}}
+        \vspace*{3mm}
+        \lstset{language=C++}
+        \begin{lstlisting}
+int factorial(int n) {
+    if (n <= 1)
+        return 1;
+    else
+        return n * factorial(n - 1);
+}
+        \end{lstlisting}
+    \end{minipage}
+
+    \vspace*{3mm}
+    \noindent In both Haskell and C++, the factorial calculation is conceptually similar. Each language defines a function named \textit{factorial} that accepts an integer argument and returns an integer result. In Haskell, guard clauses are utilized to express that if \( n \leq 1 \), then the function should return 1; otherwise, it should return \( n \) multiplied by the factorial of \( n - 1 \), symbolized as \( n \times \text{factorial}(n - 1) \). This use of guard clauses is emblematic of Haskell's functional programming paradigm.
+
 	\section{Conclusion}
 	\section{References}
 	\section{Additional Resources}
