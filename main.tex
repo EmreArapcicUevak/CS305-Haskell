@@ -578,7 +578,41 @@ pairs = [(x, y) | x <- [1..5], y <- [10, 20]]
 
             \noindent By providing a clear structure for generating and filtering data, list comprehensions in Haskell offer a more readable alternative to nested loops and are a powerful tool for list processing.
             \newpage
-	\section{Comparison with Other Languages}
+
+    \section{Comparison with Other Languages}
+
+        \subsection{Haskell vs. Java and C++: Programming Paradigms}
+        Haskell's functional paradigm contrasts with Java's and C++'s object-oriented imperative approach. Haskell programs consist of functions that transform data in a declarative style, as opposed to manipulating objects and their states.
+
+        \subsection{Memory Management}
+        Haskell and Java use garbage collection to manage memory, which simplifies development by abstracting memory deallocation. Haskell's lazy evaluation strategy can lead to more efficient memory use. In contrast, C++ requires manual memory management, although modern practices utilize smart pointers to reduce this burden.
+
+        \subsection{Type Systems and Type Inference}
+        Haskell's type system includes type inference, which allows the compiler to deduce types, whereas Java and C++ require more explicit type declarations.
+
+        \textbf{Example:}
+        \begin{lstlisting}[language=Haskell]
+    -- Haskell can infer the type of 'x' automatically
+    let x = 42 in x + 1
+        \end{lstlisting}
+
+        \subsection{Syntax and Readability}
+        Haskell's syntax is minimalistic and uses indentation, whereas Java and C++ use braces. This can make Haskell code more concise and readable.
+
+        \subsection{Immutability}
+        Haskell encourages the use of immutable data, reducing side effects and making code easier to reason about. This is in contrast to Java and C++, where mutability is more common.
+
+        \subsection{Error Handling}
+        Haskell uses types like `Either` to handle errors, potentially making code more predictable. Java and C++ rely on try-catch blocks for exception handling.
+
+        \textbf{Example:}
+        \begin{lstlisting}[language=Haskell]
+-- Haskell uses the 'Either' type for error handling
+safeDivide :: Int -> Int -> Either String Int
+safeDivide _ 0 = Left "Cannot divide by zero"
+safeDivide x y = Right (x `div` y)
+        \end{lstlisting}
+        \newpage
 	\section{Simple Code Examples}
 	\section{Conclusion}
 	\section{References}
